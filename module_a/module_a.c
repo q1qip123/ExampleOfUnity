@@ -1,6 +1,13 @@
 #include "module_a.h"
 
-int8_t AverageThreeBytes(int8_t a, int8_t b, int8_t c)
-{
-    return (int8_t)(((int16_t)a + (int16_t)b + (int16_t)c) / 3);
+uint8_t checksum(uint8_t *data, uint16_t length){
+    uint8_t sum = 0;
+    for(uint16_t i = 0; i < length; i++){
+        if(sum + data[i] < data[i]){
+            sum = sum + data[i] + 1;
+        } else {
+            sum += data[i];
+        }
+    }
+    return ~sum;
 }

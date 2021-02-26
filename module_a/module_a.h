@@ -3,6 +3,6 @@
 
 #include <stdint.h>
 
-int8_t AverageThreeBytes(int8_t a, int8_t b, int8_t c);
+uint8_t checksum(uint8_t*, uint16_t);
 
 #endif /* MODULE_A_H */

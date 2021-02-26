@@ -2,26 +2,30 @@
 
 #include <module_a.h>
 
-void test_AverageThreeBytes_should_AverageMidRangeValues(void)
+void test_checksum(void)
 {
-    TEST_ASSERT_EQUAL_HEX8(40, AverageThreeBytes(30, 40, 50));
-    TEST_ASSERT_EQUAL_HEX8(40, AverageThreeBytes(10, 70, 40));
-    TEST_ASSERT_EQUAL_HEX8(33, AverageThreeBytes(33, 33, 33));
+    uint8_t test[] = {0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01};
+    uint8_t test1[] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A};
+    uint8_t test2[] = {0x0A, 0x09, 0x08, 0x07, 0x06, 0x05, 0x04, 0x03, 0x02, 0x01};
+    TEST_ASSERT_EQUAL_HEX16(0xF5, checksum(test, 10));
+    TEST_ASSERT_EQUAL_HEX16(0xC8, checksum(test1, 10));
+    TEST_ASSERT_EQUAL_HEX16(0xC8, checksum(test2, 10));
 }
 
-void test_AverageThreeBytes_should_AverageHighValues(void)
+void test_checksum_boudaries(void)
 {
-    TEST_ASSERT_EQUAL_HEX8(80, AverageThreeBytes(70, 80, 90));
-    TEST_ASSERT_EQUAL_HEX8(127, AverageThreeBytes(127, 127, 127));
-    TEST_ASSERT_EQUAL_HEX8(84, AverageThreeBytes(0, 126, 126));
+    uint8_t low_boundary[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    uint8_t high_boundary[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
+    TEST_ASSERT_EQUAL_HEX16(0xFF, checksum(low_boundary, 10));
+    TEST_ASSERT_EQUAL_HEX16(0x09, checksum(high_boundary, 10));
 }
 
 int main(void)
 {
     UNITY_BEGIN();
 
-    RUN_TEST(test_AverageThreeBytes_should_AverageMidRangeValues);
-    RUN_TEST(test_AverageThreeBytes_should_AverageHighValues);
+    RUN_TEST(test_checksum);
+    RUN_TEST(test_checksum_boudaries);
 
     return UNITY_END();
 }
